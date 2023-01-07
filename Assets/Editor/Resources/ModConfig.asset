@@ -18,6 +18,6 @@ MonoBehaviour:
 
 
     Old Hypercolor, but not really.'
-  version: 0.96
+  version: 0.97
   outputFolder: build
   previewImage: {fileID: 2800000, guid: b7a748bd61c46a144a9f56118e78aacc, type: 3}

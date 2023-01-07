@@ -667,7 +667,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b63439541e556884497d0a8577fbad8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TwitchHelpMessage: 
+  TwitchHelpMessage: '<!{0} (s|seq) ([01_]{3} ){n}> to press the first vertex of the
+    colour sequence of length n inputted. The sequence must appear only once on the
+    module. <!{0} (b|bg|back|module|mod|m)> to press the background. The two commands
+    can only be used outside submission mode. <!{0} (p|pos) #> to press the vertex
+    numbered # from the pivot. Can only be used within submission mode.'
   TwitchManualCode: 
   TwitchAbandonModule: []
 --- !u!114 &114811210339422466
