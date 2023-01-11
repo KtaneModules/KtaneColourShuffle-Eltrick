@@ -11,6 +11,7 @@ public class Selectable : MonoBehaviour
     public KMSelectable Button { get; private set; }
     public ColorManager ColorManager { get; private set; }
 
+    internal float Speed = 20f;
     internal int Index;
 
     public void SetIndex(int i)
@@ -71,10 +72,10 @@ public class Selectable : MonoBehaviour
 
     private IEnumerator FunnyThings()
     {
-        while(!Parent.IsModuleSolved)
+        while(Speed > 0f)
         {
             yield return null;
-            Button.transform.Rotate(new Vector3(Parent.Rnd.Next(0, 3) * Mathf.PI / 2f * Time.deltaTime * 20, Parent.Rnd.Next(3, 6) * Mathf.PI / 4f * Time.deltaTime * 20, Parent.Rnd.Next(6, 9) * Mathf.PI / 6f * Time.deltaTime * 20));
+            Button.transform.Rotate(new Vector3(Parent.Rnd.Next(0, 3) * Mathf.PI / 2f * Time.deltaTime * Speed, Parent.Rnd.Next(3, 6) * Mathf.PI / 4f * Time.deltaTime * Speed, Parent.Rnd.Next(6, 9) * Mathf.PI / 6f * Time.deltaTime * Speed));
         }
     }
 }

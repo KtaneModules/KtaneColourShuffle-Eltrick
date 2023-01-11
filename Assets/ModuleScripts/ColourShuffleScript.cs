@@ -23,7 +23,7 @@ public class ColourShuffleScript : ModuleScript
     [SerializeField]
     internal AudioClip[] SoundEffects;
 
-    private static Dictionary<string, string> _colours = new Dictionary<string, string>
+    internal static Dictionary<string, string> Colours = new Dictionary<string, string>
     {
         { "K", "000" }, { "B", "001" }, { "G", "010" }, { "C", "011" }, { "R", "100" }, { "M", "101" }, { "Y", "110" }, { "W", "111" }
     };
@@ -118,7 +118,7 @@ public class ColourShuffleScript : ModuleScript
 
     private IEnumerator FunnyStuffs()
     {
-        while (!IsModuleSolved)
+        while (Speed > 0f)
         {
             yield return null;
             for (int i = 0; i < ObjectCount; i++)
@@ -161,7 +161,7 @@ public class ColourShuffleScript : ModuleScript
     {
         if (IsAnimating || IsSubmission) return;
 
-        SubmissionColours = Enumerable.Range(0, _colours.Keys.Count).ToArray().Shuffle().Take(StageCount).ToArray();
+        SubmissionColours = Enumerable.Range(0, Colours.Keys.Count).ToArray().Shuffle().Take(StageCount).ToArray();
         PickColour(SubmissionColours[0]);
 
         IsSubmission = true;
@@ -171,7 +171,7 @@ public class ColourShuffleScript : ModuleScript
     {
         TargetVertex = (Multiplier[0] * Count(_ring)[colourPicker] + Multiplier[1] * Count(_otherRing)[colourPicker] + Offset[0] + Offset[1]) % ObjectCount;
         Selectables.ForEach(x => x.ColorManager.SetBaseChannel(1f));
-        Selectables.ForEach(x => { if (x.Index == 0) x.ColorManager.SetComponents(_colours.Values.ToArray()[colourPicker].ToCharArray().Select(y => y - '0').ToArray()); });
+        Selectables.ForEach(x => { if (x.Index == 0) x.ColorManager.SetComponents(Colours.Values.ToArray()[colourPicker].ToCharArray().Select(y => y - '0').ToArray()); });
         Selectables.ForEach(x =>
         {
             if (x.Index != 0)
@@ -180,7 +180,7 @@ public class ColourShuffleScript : ModuleScript
                 x.ColorManager.SetComponents(new int[] { 1, 1, 1 });
             }
         });
-        Log("Stage #" + (4 - StageCount) + " picked " + _colours.Keys.ToArray()[colourPicker]);
+        Log("Stage #" + (4 - StageCount) + " picked " + Colours.Keys.ToArray()[colourPicker]);
         Log("Stage #" + (4 - StageCount) + " vertex calculation: (" + Multiplier[0] + " * " + Count(_ring)[colourPicker] + " + " + Multiplier[1] + " * " + Count(_otherRing)[colourPicker] + " + " + Offset[0] + " + " + Offset[1] + ") % " + ObjectCount + " = " + TargetVertex);
     }
 
@@ -198,10 +198,12 @@ public class ColourShuffleScript : ModuleScript
             Selectables[i].ColorManager.SetComponents(new int[] { 0, 0, 0 });
         }
 
-        for(int i = 0; i < 100; i++)
+        while(Speed > 0f && Selectables.Any(x => x.Speed > 0f))
         {
             yield return new WaitForSeconds(.5f);
-            Speed -= .015f;
+            
+            Selectables.ForEach(x => x.Speed -= 1f);
+            Speed -= .05f;
         }
         Speed = 0f;
     }
@@ -295,6 +297,6 @@ public class ColourShuffleScript : ModuleScript
 
     private static int[] Count(int[][] input)
     {
-        return _colours.Values.Select(x => input.Count(y => y.Join("") == x)).ToArray();
+        return Colours.Values.Select(x => input.Count(y => y.Join("") == x)).ToArray();
     }
 }
